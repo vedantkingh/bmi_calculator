@@ -1,11 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(BMICalculator());
 
 class BMICalculator extends StatelessWidget {
+  // MaterialColor blue = MaterialColor('0xFF0A0E21');
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch().copyWith(primary: Color(0xFF0A0E21), secondary: Color(0xFF0A0E21))
+      ),
       home: InputPage(),
     );
   }
