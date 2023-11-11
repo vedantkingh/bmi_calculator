@@ -1,9 +1,12 @@
-import 'package:bmi_calculator/results_page.dart';
-import 'package:bmi_calculator/reusable_card.dart';
+import 'package:bmi_calculator/calculator_brain.dart';
+import 'package:bmi_calculator/screens/results_page.dart';
+import 'package:bmi_calculator/components/reusable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'constants.dart';
-import 'icon_content.dart';
+import '../constants.dart';
+import '../components/icon_content.dart';
+import '../components/bottom_button.dart';
+import '../components/round_icon_button.dart';
 
 enum Gender { male, female }
 
@@ -23,7 +26,8 @@ class _InputPageState extends State<InputPage> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('BMI CALCULATOR'),
+          title: Text('BMI CALCULATOR',
+              style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,7 +38,9 @@ class _InputPageState extends State<InputPage> {
                 Expanded(
                   child: ReusableCard(
                     onPress: () {
-                      selectedGender = Gender.male;
+                      setState(() {
+                        selectedGender = Gender.male;
+                      });
                     },
                     colour: selectedGender == Gender.male
                         ? kActiveCardColor
@@ -48,7 +54,9 @@ class _InputPageState extends State<InputPage> {
                 Expanded(
                   child: ReusableCard(
                     onPress: () {
-                      selectedGender = Gender.female;
+                      setState(() {
+                        selectedGender = Gender.female;
+                      });
                     },
                     colour: selectedGender == Gender.female
                         ? kActiveCardColor
@@ -203,45 +211,23 @@ class _InputPageState extends State<InputPage> {
                 ),
               ],
             )),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ResultsPage()));
+            BottomButton(
+              label: 'CALCULATE',
+              onPress: () {
+                CalculatorBrain calc =
+                    CalculatorBrain(height: height, weight: weight);
+
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ResultsPage(
+                              bmiResult: calc.calculateBMI(),
+                              interpretation: calc.getInterpretation(),
+                              resultText: calc.getResult(),
+                            )));
               },
-              child: Container(
-                child: Center(
-                  child: Text(
-                    'CALCULATE',
-                    style: kNumberLabelTextStyle.copyWith(
-                        fontSize: 25.0, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                color: kBottomContainerColor,
-                padding: EdgeInsets.only(bottom: 20.0),
-                margin: EdgeInsets.only(top: 10.0),
-                height: 80.0,
-                width: double.infinity,
-              ),
             )
           ],
         ));
-  }
-}
-
-class RoundIconButton extends StatelessWidget {
-  RoundIconButton({required this.iconData, required this.onPress});
-  final Function() onPress;
-  final IconData iconData;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: onPress,
-      child: Icon(iconData),
-      constraints: BoxConstraints.tightFor(height: 56.0, width: 56.0),
-      shape: CircleBorder(),
-      elevation: 6.0,
-      fillColor: Color(0xFF4C4F5E),
-    );
   }
 }

@@ -1,14 +1,26 @@
+import 'package:bmi_calculator/components/bottom_button.dart';
 import 'package:bmi_calculator/constants.dart';
-import 'package:bmi_calculator/reusable_card.dart';
+import 'package:bmi_calculator/components/reusable_card.dart';
 import 'package:flutter/material.dart';
 
 class ResultsPage extends StatelessWidget {
+  ResultsPage(
+      {required this.bmiResult,
+      required this.resultText,
+      required this.interpretation});
+  final String bmiResult;
+  final String resultText;
+  final String interpretation;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('BMI CALCULATOR'),
+        title: Text(
+          'BMI CALCULATOR',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -16,9 +28,11 @@ class ResultsPage extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              child: Text(
-                'Your Result',
-                style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
+              child: Center(
+                child: Text(
+                  'Your Result',
+                  style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ),
@@ -32,23 +46,27 @@ class ResultsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Normal',
+                      resultText,
                       style: kResultTextStyle,
                     ),
                     Text(
-                      '18.3',
+                      bmiResult,
                       style: kBMITextStyle,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          'Your BMI is quite low, you should eat more!!',
+                      child: Text(interpretation,
                           style: TextStyle(fontSize: 22.0),
                           textAlign: TextAlign.center),
                     ),
                   ],
                 ),
-              ))
+              )),
+          BottomButton(
+              label: 'RE-CALCULATE',
+              onPress: () {
+                Navigator.pop(context);
+              })
         ],
       ),
     );
